@@ -61,8 +61,7 @@ module TicTacToe
       until move_is_valid
         puts "#{player.name}, make your move. (Squares are numbered 1-9, left to right)"
         selection = gets.chomp
-        if selection.match(/\A\d\z/) && selection.to_i.positive? &&
-           !@moves[selection.to_i - 1].nil? && @moves[selection.to_i - 1] == '_'
+        if valid_move?(selection)
           selection = selection.to_i - 1
           move[:square] = selection
           move_is_valid = true
@@ -72,6 +71,13 @@ module TicTacToe
           puts 'Invalid selection'
         end
       end
+    end
+
+    def valid_move?(selection)
+      selection.match(/\A\d\z/) &&
+        selection.to_i.positive? &&
+        !@moves[selection.to_i - 1].nil? &&
+        @moves[selection.to_i - 1] == '_'
     end
 
     def register_move(move)
