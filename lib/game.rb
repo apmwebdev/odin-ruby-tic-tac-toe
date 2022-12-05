@@ -22,12 +22,6 @@ class Game
     play_game
   end
 
-  private
-
-  def render_board
-    @board.render_board(@moves)
-  end
-
   def register_player
     puts 'Enter player name'
     @players.push(Player.new(gets.chomp))
@@ -72,6 +66,21 @@ class Game
     end
   end
 
+  def check_for_win
+    WINNING_MOVES.each do |move|
+      if moves_match?(move[0], move[1], move[2])
+        @winner = @moves[move[0]] == 'O' ? @first_player : @second_player
+        break
+      end
+    end
+  end
+
+  private
+
+  def render_board
+    @board.render_board(@moves)
+  end
+
   def valid_move?(selection)
     selection.match(/\A\d\z/) &&
       selection.to_i.positive? &&
@@ -84,16 +93,7 @@ class Game
     render_board
   end
 
-  def check_for_win
-    WINNING_MOVES.each do |move|
-      if moves_match(move[0], move[1], move[2])
-        @winner = @moves[move[0]] == 'O' ? @first_player : @second_player
-        break
-      end
-    end
-  end
-
-  def moves_match(a, b, c)
+  def moves_match?(a, b, c)
     @moves[a] != '_' && @moves[a] == @moves[b] && @moves[a] == @moves[c]
   end
 end
