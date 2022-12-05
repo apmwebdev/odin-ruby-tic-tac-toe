@@ -1,5 +1,13 @@
+# frozen_string_literal: true
+
 module TicTacToe
   class Game
+
+    WINNING_MOVES = [
+      [0, 1, 2], [0, 3, 6], [0, 4, 8],
+      [6, 7, 8], [2, 5, 8], [2, 4, 6]
+    ].freeze
+
     def initialize
       @players = []
       @board = TicTacToe::Board.new
@@ -72,12 +80,11 @@ module TicTacToe
     end
 
     def check_for_win
-      if moves_match(0, 1, 2) || moves_match(0, 3, 6) || moves_match(0, 4, 8)
-        @winner = @moves[0] == 'O' ? @first_player : @second_player
-      elsif moves_match(6, 7, 8) || moves_match(2, 5, 8)
-        @winner = @moves[8] == 'O' ? @first_player : @second_player
-      elsif moves_match(2, 4, 6)
-        @winner = @moves[2] == 'O' ? @first_player : @second_player
+      WINNING_MOVES.each do |move|
+        if moves_match(move[0], move[1], move[2])
+          @winner = @moves[move[0]] == 'O' ? @first_player : @second_player
+          break
+        end
       end
     end
     
