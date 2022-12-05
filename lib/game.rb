@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Game
+  attr_accessor :players, :board, :moves, :winner, :first_player,
+                :second_player
 
   WINNING_MOVES = [
     [0, 1, 2], [0, 3, 6], [0, 4, 8],
@@ -10,12 +12,11 @@ class Game
   def initialize
     @players = []
     @board = Board.new
-    @moves = []
-    @winner = false
+    @moves = Array.new(9, '_')
+    @winner = nil
   end
 
   def start_game
-    9.times { @moves.push('_') }
     2.times { register_player }
     determine_starting_player
     render_board
@@ -38,9 +39,12 @@ class Game
 
   def play_game
     until @winner
+      prompt = ', make your move. (Squares are numbered 1-9, left to right)'
       if @first_player.turns_taken == @second_player.turns_taken
+        puts @first_player.name + prompt
         take_turn(@first_player)
       else
+        puts @second_player.name + prompt
         take_turn(@second_player)
       end
       check_for_win
@@ -52,7 +56,6 @@ class Game
     move = { player: player, square: nil }
     move_is_valid = false
     until move_is_valid
-      puts "#{player.name}, make your move. (Squares are numbered 1-9, left to right)"
       selection = gets.chomp
       if valid_move?(selection)
         selection = selection.to_i - 1
